@@ -1,5 +1,5 @@
 //
-//  HasSet.swift
+//  HashSet.swift
 //  AlgorithmSwift
 //
 //  Created by Liangzan Chen on 11/18/17.

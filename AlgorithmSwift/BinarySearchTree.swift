@@ -1,6 +1,6 @@
 //
 //  BinarySearchTree.swift
-//  DesignPattern
+//  
 //
 //  Created by Liangzan Chen on 11/4/17.
 //  Copyright © 2017 clz. All rights reserved.
@@ -8,11 +8,14 @@
 
 import Foundation
 
+
+
 public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable {
     var value: T
     weak var parent: BinarySearchTree?
     var left: BinarySearchTree?
     var right: BinarySearchTree?
+    
     
     public static func ==(lhs: BinarySearchTree, rhs: BinarySearchTree) -> Bool {
         return (lhs === rhs)
@@ -44,8 +47,36 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
             self.insert(v)
         }
     }
+    /*
+    private static func creatTree(_ array: [T], _ start: Int, _ end: Int) -> BinarySearchTree<T>? {
+        guard start <= end else {
+            return nil
+        }
+        let mid = (start + end)/2
+        let tree = BinarySearchTree<T>(value: array[mid])
+        tree.left = creatTree(array, start, mid - 1)
+        tree.right = creatTree(array, mid + 1, end)
+        return tree
+    } */
     
-    
+    public static func createBST(from sortedArray: [T]) -> BinarySearchTree<T>? {
+        guard sortedArray.count > 0 else {
+            return nil
+        }
+        
+        func creatTree(_ array: [T], _ start: Int, _ end: Int) -> BinarySearchTree<T>? {
+            guard start <= end else {
+                return nil
+            }
+            let mid = (start + end)/2
+            let tree = BinarySearchTree<T>(value: array[mid])
+            tree.left = creatTree(array, start, mid - 1)
+            tree.right = creatTree(array, mid + 1, end)
+            return tree
+        }
+
+        return creatTree(sortedArray, 0, sortedArray.count - 1)
+    }
     
     public var isRoot: Bool {
         return parent == nil
@@ -86,21 +117,31 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
             return false
         }
         
-        if let left = left, let rightTree = tree.right {
-            return left.isMirror(of: rightTree)
+        if (left == nil && tree.right != nil) || (left != nil && tree.right == nil){
+            return false;
         }
-        else if let right = right, let leftTree = tree.left {
-            return  right.isMirror(of: leftTree)
-        }
-        else if left == nil && tree.right == nil {
-            return true
-        }
-        else if right == nil && tree.left == nil {
-            return true
-        }
-        else {
+        
+        if (right == nil && tree.left != nil) || (right != nil && tree.left == nil) {
             return false
         }
+        
+        var isLeftMirror = false
+        if  left == nil && tree.right == nil {
+            isLeftMirror = true
+        }
+        else {
+            isLeftMirror = left!.isMirror(of: tree.right!)
+        }
+        
+        var isRightMirror = false
+        if right == nil && tree.left == nil {
+            isRightMirror = true
+        }
+        else {
+            isRightMirror = right!.isMirror(of: tree.left!)
+        }
+        
+        return isLeftMirror && isRightMirror
     }
     
     public func createMirror() -> BinarySearchTree<T> {
@@ -181,10 +222,23 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
         right?.traversePreOrder(process)
     }
     
+    
     public func traversePostOrder(_ process: (T) ->Void) {
         left?.traversePostOrder(process)
         right?.traversePostOrder(process)
         process(value)
+    }
+    
+    public func traverseAllRoot2LeafPaths(_ path:  inout [BinarySearchTree], _ process: ([BinarySearchTree])->Void) {
+        path.append(self)
+        if isLeaf {
+            process(path)
+        }
+        else {
+            left?.traverseAllRoot2LeafPaths(&path, process)
+            right?.traverseAllRoot2LeafPaths(&path, process)
+        }
+        path.removeLast()
     }
     
     public func leastCommonAncestor(_ value1: T, _ value2: T) -> BinarySearchTree? {
@@ -408,6 +462,19 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
         return a
     }
     
+    public func isBalanced() -> Bool {
+        if isLeaf {
+            return true
+        }
+        else {
+            let isLeftBalanced = left?.isBalanced() ?? true
+            let isRightBalaced = right?.isBalanced() ?? true
+            let leftHeight: Int = left?.height() ?? 0
+            let rightHeight: Int = right?.height() ?? 0
+            return isLeftBalanced && isRightBalaced && (abs(leftHeight - rightHeight) < 2)
+        }
+    }
+    
     public func height() -> Int {
         if isLeaf {
             return 0
@@ -477,6 +544,7 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
         }
         return node
     }
+    
     
     public func allLeftLeaves() -> [T] {
         var leftLeaves = [T]()
@@ -590,4 +658,32 @@ public class BinarySearchTree<T:Comparable> : CustomStringConvertible, Equatable
     }
     
     
+}
+
+typealias IntBinarySearchTree = BinarySearchTree<Int>
+/*
+ Greater sum tree is a tree in which every node contains the sum of all the nodes which are greater than the node.
+ 
+ */
+func transformToGreaterSumTree(_ tree: IntBinarySearchTree?, _ sum: inout Int) {
+    if let tree = tree {
+        transformToGreaterSumTree(tree.right, &sum)
+        sum += tree.value
+        tree.value = sum - tree.value
+        transformToGreaterSumTree(tree.left, &sum)
+    }
+}
+
+/*
+ Sum tree of a binary tree, is a tree where each node in the converted tree will contains the sum of the left and right sub trees in the original tree
+ */
+func transformToSumTree(_ tree: IntBinarySearchTree?) -> Int {
+    if let tree = tree {
+        let leftSum = transformToSumTree(tree.left)
+        let rightSum = transformToSumTree(tree.right)
+        let sum = tree.value + leftSum + rightSum
+        tree.value = leftSum + rightSum
+        return sum
+    }
+    return 0
 }

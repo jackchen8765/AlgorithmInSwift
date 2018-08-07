@@ -10,12 +10,9 @@ import Foundation
 
 
 extension String {
-    func allSubStrings() -> [[String]] {
-        var all = [[String]]()
-        
-        
+    func allSubStrings() -> [String] {
+        var subs = [String]()
         for i in 0..<count {
-            var subs = [String]()
             for j in (i+1)...count {
                 var letters = [Character]()
                 for k in i..<j {
@@ -24,10 +21,9 @@ extension String {
                 }
                 subs.append(String(letters))
             }
-            all.append(subs)
         }
         
-        return all
+        return subs
     }
     
     func toInt(_ base: Int = 10) -> Int? {

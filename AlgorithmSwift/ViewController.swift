@@ -14,9 +14,33 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        //testPivot()
+        //testBST()
+        //testStringExtension()
+        //testArrayExtension()
+        //testArray()
         
-        //testHashTable()
+
+        /*
+        // Do any additional setup after loading the view, typically from a nib.
+        testMaxSumOfSubArray()
+        testKnapSack()
+        testLongestPalindromeSubstring()
+        testSoduku()
+        testRatInMaze()
+        testKnightTour()
+        testWordBreaking()
+        testQueenProblem()
+        testWordMatrix()
+        testSubsetsOfSum()
+        testStringPermutation()
+        checkStringRotation()
+        testPhonePads()
+        testStringsOfNBits()
+        testMinJumps()
+        testBracketPairs()
+        
+        testHashTable()
         
         //testHeap()
         
@@ -58,6 +82,12 @@ class ViewController: UIViewController {
         
         //testBits()
         
+        testBST()
+        
+        testNumber2Words()
+        
+        testSumDigits()
+        
         testEggDrop()
         
         testLRUCache()
@@ -81,13 +111,13 @@ class ViewController: UIViewController {
         testMissingTwoNumbers()
         testPalindrome()
         
-        testBST()
+        
         
         testDequ()
         
         testGCD()
-        
-        
+        */
+ 
         
     }
 
@@ -99,6 +129,184 @@ class ViewController: UIViewController {
 
 
     // MARK: Test
+    
+    func testKnapSack() {
+        let weightValues: [(w: Int, v: Int)] = [ (30, 120), (20, 80), (10, 30), (5, 15), (40, 160)]
+        print("naive: \(knapSackNaive(weightValues, 50))")
+        
+        print("dp: \(knapSackDP(weightValues, 50))")
+    }
+    
+    func testLongestPalindromeSubstring() {
+        let str = "bananasananabs"
+        print(longestPalindromeSubstring(str))
+    }
+    
+    func testSoduku() {
+        let matrix = [
+            [0,0,7,4,0,3,0,8,0],
+            [0,0,0,0,2,0,4,7,1],
+            [0,0,6,0,0,5,0,0,0],
+            [3,0,1,0,0,8,0,0,0],
+            [0,5,0,0,6,0,0,3,0],
+            [0,0,0,3,0,0,5,0,2],
+            [0,0,0,9,0,0,8,0,0],
+            [7,8,9,0,3,0,0,0,0],
+            [0,3,0,2,0,4,7,0,0]]
+        /*
+           [[5,0,0,0,0,1,3,0,0],
+            [0,0,0,0,6,5,1,7,0],
+            [0,0,0,4,0,0,0,2,5],
+            [0,6,0,0,7,0,0,3,0],
+            [0,7,5,0,0,0,6,8,0],
+            [0,8,0,0,4,0,0,1,0],
+            [8,2,0,0,0,6,0,0,0],
+            [0,5,6,3,8,0,0,0,0],
+            [0,0,1,7,0,0,0,0,3]] */
+        
+        if let solution = soduku(matrix) {
+            for row in solution {
+                print(row)
+            }
+        }
+    }
+    
+    func testRatInMaze() {
+        let maze = [ [1,1,1,0,0,0,0],
+                     [1,0,1,0,1,1,1],
+                     [1,0,1,1,1,0,1],
+                     [1,0,0,0,0,1,1],
+                     [1,0,0,0,1,1,0],
+                     [1,1,1,1,0,1,1],
+                     [1,0,1,0,0,0,1]]
+        print("maze:")
+        for row in maze {
+            print(row)
+        }
+        print("Solution:")
+        if let path = ratPath(in: maze) {
+            for row in path {
+                print(row)
+            }
+        }
+        else {
+            print("no path out")
+        }
+    }
+    
+    func testKnightTour() {
+        if let tour = knightTourPostions() {
+            for row in tour {
+                print(row.map{String(format: "%02d", $0)})
+            }
+        }
+    }
+    
+    func testWordBreaking() {
+        let words: Set<String> = ["I", "have", "a", "book", "read", "ocean", "Sam", "am", "rain", "look", "do"]
+        let str = "Idoreadabook"
+        if let found = wordBreakNaive(str, words) {
+            print(found)
+        }
+        else {
+            print("\(str) not breakable")
+        }
+        
+        if let dpFound = wordBreakDP(str, words) {
+            print(dpFound)
+        }
+    }
+    
+    func testQueenProblem() {
+        let n = 8
+        let positions = queenPositions(n)
+        for row in positions {
+            print(row)
+        }
+        
+    }
+    
+    func testWordMatrix() {
+        let matrix : [[Character]] = [ ["t", "o", "w", "c", "d" ],
+                                       ["a", "h", "n", "z", "x" ],
+                                       ["h", "w", "o", "i", "o" ],
+                                       ["o", "r", "n", "r", "n" ],
+                                       ["a", "b", "r", "i", "n" ] ]
+        for m in matrix {
+            print(m)
+        }
+        
+        let word = "horizon"
+        if let found = find(word: word, in: matrix) {
+            for row in found {
+                print(row)
+            }
+        }
+        else {
+            print("\(word) not found")
+        }
+    }
+    
+    func testSubsetsOfSum() {
+        let n = 4
+        printAllSubsets(of: n)
+        print(allSubsets(of: n))
+        
+        let a = [2, 10, 6, 8, 4]
+        let sum = 16
+        let count = countSubsetsOfSum(a, 16)
+        print("\(count)subsets whose sum is \(sum) " )
+    }
+    
+    func testStringPermutation() {
+        let str = "abcd"
+        let perms = permutations(str)
+        print(perms)
+    }
+    
+    func checkStringRotation() {
+        let str1 = "aiwotmocz"
+        let str2 = "tmoczaiwo"
+        if isRotated(str1, str2) {
+            print("\(str1) is rotation of \(str2)")
+        }
+        else {
+            print("\(str1) is not rotation of \(str2)")
+        }
+    }
+    
+    func testPhonePads() {
+        let phoneNumbers = [2,3,4]
+        printLettersOfPhoneNumbers(phoneNumbers)
+    }
+    
+    func testStringsOfNBits() {
+        let n = 3
+        
+        printStringsOfNBits(n)
+    }
+    
+    func testMinJumps() {
+        let array = [1, 3, 5, 3, 3,1,1,6,1,1,1,1,1,4]
+        var mem = [Int: Int]()
+        let min = findMinJumps(array, startIndex: 0, &mem)
+        print("The minimum number of jumps is \(min)")
+    }
+    
+    func testBracketPairs() {
+        let n = 4
+        printBracketPairs(of: n)
+    }
+    
+    func testNumber2Words() {
+        let n: UInt = 6_110_112_054_103_708_583
+        print(number2Words(n))
+    }
+    
+    func testSumDigits() {
+        let n = 34567
+        print(sumOfDigits(n))
+    }
     
     func testEggDrop() {
         for egg in 1..<5 {
@@ -145,7 +353,7 @@ class ViewController: UIViewController {
         let value = 9
         print("\(countOfWayUsingCoins(coins, value: value)) of coin combinations")
         
-        print("\(minCoins(coins, value: value)) coins are needed.")
+        print("\(minNumberOfCoins(coins, value: value)) coins are needed.")
     }
     
     func testConferenceRoom() {
@@ -175,7 +383,7 @@ class ViewController: UIViewController {
     }
     
     func testMaxSumOfSubArray() {
-        let numbers = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+        let numbers = [1, 2, -1, 3, 5, -3, 6]// [-2, 1, -3, 4, -1, 2, 1, -5, 4]
         print("max sum is \(maxSumOfSubArray(numbers))")
     }
     
@@ -449,33 +657,52 @@ class ViewController: UIViewController {
     }
     
     func testBST() {
-        let tree = BinarySearchTree<Int>(value: 15)
-        tree.insert(19)
-        tree.insert(17)
-        tree.insert(8)
-        tree.insert(6)
-        tree.insert(4)
-        tree.insert(13)
-        tree.insert(9)
-        tree.insert(14)
-        tree.insert(2)
-        tree.insert(10)
 
+        let array = [2, 4, 6, 8, 9, 10, 13, 15, 17, 18, 19, 21, 25]
+        let tree = BinarySearchTree<Int>.createBST(from: array)!
+        let tree1 = BinarySearchTree<Int>.createBST(from: array)!
+        let tree2 = BinarySearchTree<Int>.createBST(from: array)!
+        
+        if tree.isBalanced() {
+            print("tree is balanced")
+        }
+        else {
+            print("tree is not balaced")
+        }
+        
+        var path = [BinarySearchTree<Int>]()
+        tree.traverseAllRoot2LeafPaths(&path){ nodes in
+            var str = "["
+            for (index, node) in nodes.enumerated() {
+                str += index == 0 ? "\(node.value)" : "->\(node.value)"
+            }
+            str += "]"
+            print(str)
+        }
         
         print(tree.toArray())
+
+        var sum = 0
+        transformToGreaterSumTree(tree1, &sum)
+        print("greater sum tree")
+        print(tree1)
+        
+        let _ = transformToSumTree(tree2)
+        print("sum tree")
+        print(tree2)
         
         print("traverse boundary anti-clockwise")
         tree.traverseBounaryAntiClockWise() { print($0) }
         
         print("breadth first traverse")
-        tree.traverseBreadthFirst() { print([$0]) }
+        tree.traverseBreadthFirst() { print($0) }
         
-        if let node = tree.leastCommonAncestor(4, 14) {
+        if let node = tree.leastCommonAncestor(4, 8) {
             print("lease common ancestor: \(node.value)")
         }
         
         print("traverse in level order")
-        tree.traverseLevelOrder{ print([$0]) }
+        tree.traverseLevelOrder{ print($0) }
         
         
         

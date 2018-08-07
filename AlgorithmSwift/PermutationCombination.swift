@@ -34,27 +34,40 @@ func permutation( _ n : Int, _ k: Int) -> Int {
     return result
 }
 
-//let letters = ["a", "b", "c", "d", "e"]
-//permuteWirth(letters, letters.count - 1)
-//["a", "b", "c", "d", "e"]
-//["b", "a", "c", "d", "e"]
-//["b", "c", "a", "d", "e"]
-//["a", "c", "b", "d", "e"]
-//...
+/*
+ let letters = "abcd"
+ return:
+ 
+["dabc", "dacb", "dbca", "dbac",
+ "dbac", "dbca", "abdc", "abcd",
+ "adcb", "adbc", "adbc", "adcb",
+ "acbd", "acdb", "abdc", "abcd",
+ "abcd", "abdc", "adbc", "adcb",
+ "abcd", "abdc", "abdc", "abcd"]
+ */
 
-func permuteWorth<T>(_ a: [T], _ n: Int) {
-    if n == 0 {
-        print(a)
-    }
+
+func permutations(_ str: String) -> [String] {
+    var result = [String]()
     
-    var a = a
-    permuteWorth(a, n-1)
+    var chars = Array(str)
     
-    for i in 0..<a.count {
-        swap(&a[i], &a[n])
-        permuteWorth(a, n-1)
-        swap(&a[i], &a[n])
+    func permulate(_ a: [Character], _ left: Int, _ size: Int) {
+        if left == size {
+            result.append(String(a))
+            return
+        }
+        var a = a
+        for i in left..<size {
+            a.swapAt(i, size - 1)
+           
+            permulate(a, left + 1, size)
+            
+            a.swapAt(i, size - 1)
+        }
     }
+    permulate(chars, 0, chars.count)
+    return result
 }
 
 

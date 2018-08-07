@@ -22,6 +22,8 @@ func firstPrimes(_ n: Int) -> [Int] {
     return primes
 }
 
+
+
 func isPrime( _ n: Int) -> Bool {
     if n <= 1 {
         return false

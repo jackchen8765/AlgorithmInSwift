@@ -52,10 +52,15 @@ func countOfWayUsingCoins(_ coins: [Int], value: Int) ->Int  {
 
 
 /*
+ Given a value V, if we want to make change for V cents, and we have infinite supply of each of C = { C1, C2, .. , Cm} valued coins, what is the minimum number of coins to make the change?
+ 
+ Input: coins[] = {25, 10, 5}, V = 30
+ Output: Minimum 2 coins required
+ We can use one coin of 25 cents and one of 5 cents
  
  */
 
-func minCoins(_ coins: [Int], value: Int ) -> Int {
+func minNumberOfCoins(_ coins: [Int], value: Int ) -> Int {
     let c = coins.count
     guard c > 0 else {
         return 0
